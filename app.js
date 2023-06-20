@@ -28,8 +28,8 @@ function main() {
 
     app.post('/txt2img', async function (req, res) {
         console.log("processing..")
-        const result_image = await txt2img(baseUrl, sampler, steps, prompt)
-        res.send(result_image) 
+        const resultImage = await txt2img(baseUrl, sampler, steps, prompt)
+        res.render('txt2img', {image: resultImage})
     });
 
     app.listen(8080, () => {
