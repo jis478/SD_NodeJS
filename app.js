@@ -1,15 +1,20 @@
 const express = require('express');
 const multer = require("multer");
-const sharp = require("sharp");
 const axios = require('axios');
 const fs = require("fs");
+
 
 function main() {
     const app = express();
     const upload = multer();
+    const baseUrl = 'https://127.0.0.1:7860/sdapi/v1'
+    const sampler = 'Euler a'
+    const steps = 20
+    const prompt = "this is a test prompt"
 
     app.get("/", (req,res) => {
-        res.end(fs.readFileSync("index.html", "utf8"))
+        console.log("Welcome to NodeJS SD app!")
+        // res.end(fs.readFileSync("index.html", "utf8"))
     })
 
     app.post('/translation', upload.single('image_file'), async function (req, res) {
@@ -21,29 +26,36 @@ function main() {
         // res.json(boxes);
     });
 
+    app.post('/txt2img', async function (req, res) {
+        console.log("processing..")
+        const result_image = await txt2img(baseUrl, sampler, steps, prompt)
+        res.send(result_image) 
+    });
+
     app.listen(8080, () => {
         console.log('Server is listening on port 8080')
     });
 
-main()
+  }
 
 
-async function toonfilter_on_image(input) {
-    const outputs = await api. 
-    model.run({images:input});
-    return outputs["output0"].data;
-}
+async function txt2img(baseUrl, sampler, steps, prompt) {
 
-
-async function callRemoteAPI() {
   try {
-    const response = await axios.get('https://api.example.com/data');
-    // Process the response data
-    console.log(response.data);
-  } catch (error) {
-    // Handle any errors that occurred during the API call
-    console.error(error);
+
+    postUrl = baseUrl + "txt2img"
+    const request = await axios.post(postUrl, {
+        prompt: prompt,
+        sampler: sampler,
+        steps: steps
+    });
+
+    let resultImage = await request.data.images;
+    return resultImage
+
+  } catch (err) {
+    console.error(err)
   }
 }
 
-callRemoteAPI();
+main();
