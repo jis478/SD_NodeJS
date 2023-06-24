@@ -40,9 +40,7 @@ function main() {
 
 
 async function txt2img(baseUrl, sampler, steps, prompt) {
-
   try {
-
     postUrl = baseUrl + "txt2img"
     const request = await axios.post(postUrl, {
         prompt: prompt,
