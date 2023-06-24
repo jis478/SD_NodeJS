@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <tite>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <tite>Document</title> -->
 </head>
 <body>
-    <h1> "txt2img testing" </h1>
+    <h1> txt2img testing </h1>
     <h3> prompt </h3>
     <!-- <form action="0.0.0.0/txt2img" method="POST"> -->
         <!-- Prompt: <input type="text" name="prompt">
@@ -15,7 +16,9 @@
         <form id="myForm">
             <label for="name">Prompt:</label>
             <input type="text" id="prompt" name="prompt">
-            <input type="submit" value="Submit">
+            <input type="text" id="steps" name="steps">
+            <input type="text" id="cfg" name="cfg">
+            <input type="submit" value="submit">
         </form>
 
     <script>
@@ -30,7 +33,7 @@
         data[key] = value;
         }
 
-        axios.post('https://example.com/api/endpoint', data)
+        axios.post('localhost:8080/txt2img', data)
         .then(response => {
             console.log(response.data);
         })

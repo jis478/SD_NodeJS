@@ -8,10 +8,9 @@ function main() {
     const app = express();
     const upload = multer();
     const baseUrl = 'https://127.0.0.1:7860/sdapi/v1'
-    const sampler = 'Euler a'
-    const steps = 20
-    const prompt = "this is a test prompt"
 
+    app.use(express.urlencoded({ extended: true }));
+    
     app.get("/", (req,res) => {
         console.log("Welcome to NodeJS SD app!")
         // res.end(fs.readFileSync("index.html", "utf8"))
@@ -27,9 +26,13 @@ function main() {
     });
 
     app.post('/txt2img', async function (req, res) {
-        console.log("processing..")
-        const resultImage = await txt2img(baseUrl, sampler, steps, prompt)
+        console.log("processing..")        
+        const requestBody = req.body;
+        const prompt = requestBody.prompt
+        const steps = requestBody.steps;
+        const resultImage = await txt2img(baseUrl, steps, prompt);
         res.render('txt2img', {image: resultImage})
+        console.log("finished..")
     });
 
     app.listen(8080, () => {
@@ -39,15 +42,13 @@ function main() {
   }
 
 
-async function txt2img(baseUrl, sampler, steps, prompt) {
+async function txt2img(baseUrl, steps, prompt) {
   try {
-    postUrl = baseUrl + "txt2img"
+    postUrl = baseUrl + "/txt2img"
     const request = await axios.post(postUrl, {
         prompt: prompt,
-        sampler: sampler,
         steps: steps
     });
-
     let resultImage = await request.data.images;
     return resultImage
 
