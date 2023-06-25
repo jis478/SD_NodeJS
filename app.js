@@ -2,14 +2,21 @@ const express = require('express');
 const multer = require("multer");
 const axios = require('axios');
 const fs = require("fs");
+const cors = require("cors")
+const path = require('path');
 
 
 function main() {
     const app = express();
     const upload = multer();
-    const baseUrl = 'https://127.0.0.1:7860/sdapi/v1'
+    const baseUrl = 'http://10.168.73.84:50626/sdapi/v1'
+
+    app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'ejs');
 
     app.use(express.urlencoded({ extended: true }));
+    app.use(express.static('public'));    
+    app.use(cors());    
     
     app.get("/", (req,res) => {
         console.log("Welcome to NodeJS SD app!")
@@ -31,7 +38,9 @@ function main() {
         const prompt = requestBody.prompt
         const steps = requestBody.steps;
         const resultImage = await txt2img(baseUrl, steps, prompt);
-        res.render('txt2img', {image: resultImage})
+        // resultImage.save('static/resultImages/image.jpg')
+        
+        res.render('txt2img.html', {imageUrl: resultImage})
         console.log("finished..")
     });
 
@@ -41,15 +50,14 @@ function main() {
 
   }
 
-
 async function txt2img(baseUrl, steps, prompt) {
   try {
     postUrl = baseUrl + "/txt2img"
-    const request = await axios.post(postUrl, {
+    const response = await axios.post(postUrl, {
         prompt: prompt,
         steps: steps
     });
-    let resultImage = await request.data.images;
+    let resultImage = await response.data.images;
     return resultImage
 
   } catch (err) {

@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- <tite>Document</title> -->
+    <script src="public/script.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1> txt2img testing </h1>
@@ -17,10 +22,11 @@
             <label for="name">Prompt:</label>
             <input type="text" id="prompt" name="prompt">
             <input type="text" id="steps" name="steps">
-            <input type="text" id="cfg" name="cfg">
             <input type="submit" value="submit">
         </form>
 
+    <img id="resultImage" src="<%= imageUrl %>" alt="Image" class="hidden">
+    
     <script>
     const form = document.getElementById('myForm');
     form.addEventListener('submit', function(event) {
@@ -33,7 +39,10 @@
         data[key] = value;
         }
 
-        axios.post('localhost:8080/txt2img', data)
+        console.log("here")
+        alert("her2e222")
+
+        axios.post('http://localhost:8080/txt2img', data)
         .then(response => {
             console.log(response.data);
         })
