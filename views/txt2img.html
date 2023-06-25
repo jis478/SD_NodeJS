@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="public/script.js"></script>
+    <!-- <script src="public/script.js"></script> -->
     <style>
         .hidden {
             display: none;
@@ -24,33 +24,45 @@
             <input type="text" id="steps" name="steps">
             <input type="submit" value="submit">
         </form>
+    <img id="resultImage" src="" alt="Image" class="hidden">
 
-    <img id="resultImage" src="<%= imageUrl %>" alt="Image" class="hidden">
-    
-    <script>
-    const form = document.getElementById('myForm');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+<script>        
 
-        const formData = new FormData(form);
+// document.addEventListener('DOMContentLoaded', () => {
+//         const image = document.getElementById('resultImage');
 
-        const data = {};
-        for (let [key, value] of formData) {
+//         image.addEventListener('load', () => {
+//             image.classList.remove('hidden');
+//         });
+
+//         image.addEventListener('error', () => {
+//             // Handle image loading error, if necessary
+//         });
+//     });
+
+
+const form = document.getElementById('myForm');
+console.log(form)
+form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    const data = {};
+    for (let [key, value] of formData) {
         data[key] = value;
-        }
-
-        console.log("here")
-        alert("her2e222")
-
-        axios.post('http://localhost:8080/txt2img', data)
+    }
+    console.log(data)
+    axios.post('http://localhost:8080/txt2img', data)
         .then(response => {
             console.log(response.data);
         })
         .catch(error => {
             console.error(error);
-       });
-    });
-</script>
+        });
+});
+
+</script>    
 </body>
 </html>
 

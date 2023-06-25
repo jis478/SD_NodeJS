@@ -13,7 +13,9 @@ function main() {
 
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'ejs');
+    app.engine('html', require('ejs').renderFile);
 
+    app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(express.static('public'));    
     app.use(cors());    
@@ -35,11 +37,10 @@ function main() {
     app.post('/txt2img', async function (req, res) {
         console.log("processing..")        
         const requestBody = req.body;
+        console.log(requestBody)
         const prompt = requestBody.prompt
         const steps = requestBody.steps;
-        const resultImage = await txt2img(baseUrl, steps, prompt);
-        // resultImage.save('static/resultImages/image.jpg')
-        
+        const resultImage = await txt2img(baseUrl, steps, prompt);        
         res.render('txt2img.html', {imageUrl: resultImage})
         console.log("finished..")
     });
